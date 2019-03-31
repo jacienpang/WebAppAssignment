@@ -79,7 +79,13 @@ Route::resource('/tenant', 'TenantController');
 Route::get('tenant/delete/{tenant}',['as' => 'tenant.delete', 'uses' => 'TenantController@destroy']);
 
 Auth::routes();
-Route::get('/admins', 'AdminController@index')->name('admins.index');
-Route::post('/admins/store', 'AdminController@store')->name('admins.store');
+Route::get('/admins', 'AdminController@index')
+        ->name('admins.index');
+Route::post('/admins/store', 'AdminController@store')
+        ->name('admins.store');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')
+        ->name('home');
+
+Route::get('/directory', 'DirectoryController@index')
+        -> name('directory.index');
