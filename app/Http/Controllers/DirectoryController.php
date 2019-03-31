@@ -14,10 +14,12 @@ class DirectoryController extends Controller
      */
     public function index()
     {
+
         $tenants = Tenant::orderBy('name', 'asc')->get();
 
         return view('directory.index', [
             'tenants' => $tenants
         ]);
+
     }
 }
