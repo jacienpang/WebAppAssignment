@@ -1,3 +1,5 @@
+@include('tenants._filters')
+
 <?php
 
 ?>
@@ -28,12 +30,12 @@
                 <tbody>
                     @foreach ($tenants as $i => $tenant)
                         <tr>
-                            //No.
+
                             <td class = "table-text">
                                 <div>{{ $i+1 }}</div>
                             </td>
 
-                            //Name
+
                             <td class = "table-text">
                                 <div>
                                     {!! link_to_route(
@@ -46,32 +48,32 @@
                                 </div>
                             </td>
 
-                            //Lot Number
+
                             <td class = "table-text">
                                 <div>{{ $tenant->lot_number }}</div>
                             </td>
 
-                            //Zone
+
                             <td class = "table-text">
                                 <div>{{ $tenant->zone->code }}</div>
                             </td>
 
-                            //Floor
+
                             <td class = "table-text">
                                 <div>{{ $tenant->floor->code }}</div>
                             </td>
 
-                            //Category
+
                             <td class = "table-text">
                                 <div>{{ $tenant->category->name }}</div>
                             </td>
 
-                            //Created at
+
                             <td class = "table-text">
                                 <div>{{ $tenant->created_at }}</div>
                             </td>
 
-                            //Actions
+
                             <td class = "table-text">
                                 <div>
                                     {!! link_to_route(
