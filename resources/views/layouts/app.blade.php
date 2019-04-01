@@ -15,39 +15,40 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand justify-content-start" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
-
-
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Mall Directory | UTAR Mega Mall') }}
+                </a>
+            </div>
             <div>
-                <ul class="navbar-nav justify-content-end">
+                <ul class="nav navbar-nav justify-content-end">
                     @if (Auth::guest())
                         <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
                     @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" id="DropdownMenuLink" data-toggle="dropdown"
-                               aria-haspopup="false" aria-expanded="true">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="DropdownMenuLink">
-                                <a href="{{ route('logout') }}" class="dropdown-item"
-                                   onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                    Logout
+                        <li>
+                            <div class="dropdown show">
+                                <a href="#" class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    {{ Auth::user()->name }}
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    <a href="{{ route('logout') }}" class="dropdown-item"
+                                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                      style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                          style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </div>
                             </div>
                         </li>
                     @endif
                 </ul>
             </div>
-
         </div>
     </nav>
 
