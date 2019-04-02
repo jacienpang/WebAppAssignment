@@ -67,8 +67,13 @@ use App\Category;
                 <img src="/storage/tenant/{{$tenant->id}}.jpg"
                 width="240" alt= {{ $tenant->name}}>
                 @else
+                @if(Storage::disk('public')->exists('tenant/'.$tenant->id.'.jpg'))
+                <img src="/storage/tenant/{{$tenant->id}}.jpg"
+                width="240" alt= {{ $tenant->name}}>
+                @else
                 <img src="http://www.totalbattery.com/wp-content/uploads/2017/04/Under_construction-300x300.png"
                 width="240">
+                @endif
                 @endif
                 <div class="card-body">
                     <h5 class="card-title"> {{ $tenant->name }} </h5>

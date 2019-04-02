@@ -76,6 +76,14 @@
 
                             <td class = "table-text">
                                 <div>
+                                  {!! link_to_route(
+                                     'tenant.upload',
+                                     $title = 'Upload Photo',
+                                     $parameters = [
+                                     'id' => $tenant->id,
+                                     ]
+                                     ) !!}
+
                                     {!! link_to_route(
                                         'tenant.edit',
                                         $title = 'Edit',

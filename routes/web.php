@@ -77,6 +77,11 @@ Route::put('/tenant/{id}', 'TenantController@update')
         -> name('tenant.update');
 Route::resource('/tenant', 'TenantController');
 Route::get('tenant/delete/{tenant}',['as' => 'tenant.delete', 'uses' => 'TenantController@destroy']);
+Route::get('/tenant/{id}/upload', 'TenantController@upload')
+        ->name('tenant.upload');
+Route::post('/tenant/{id}/save-upload', 'TenantController@saveUpload')
+        ->name('tenant.saveUpload');
+
 
 Auth::routes();
 Route::get('/admins', 'AdminController@index')
