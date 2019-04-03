@@ -1,0 +1,196 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Tenant;
+use Illuminate\Http\Request;
+
+class TenantController extends Controller
+{
+    /**
+    * Create a new controller instance.
+    *
+    * @return void
+    */
+    public function __construct()
+    {
+      $this->middleware('auth');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $tenants = Tenant::with('zone:id,code')
+       ->when($request->query('zone_id'), function($query) use ($request) {
+       return $query->where('zone_id', $request->query('zone_id'));
+       })
+       ->when($request->query('floor_id'), function($query) use ($request) {
+       return $query->where('floor_id', $request->query('floor_id'));
+       })
+       ->when($request->query('category_id'), function($query) use ($request) {
+       return $query->where('category_id', $request->query('category_id'));
+        })
+        ->paginate(20);
+
+      return view('tenants.index', [
+          'tenants' => $tenants,
+          'request' => $request,
+      ]);
+    }
+
+    /**
+     * Show the form for creating a new tenant.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $tenant = new Tenant();
+
+        return view('tenants.create', [
+            'tenant' => $tenant,
+        ]);
+    }
+
+    /**
+     * Store a newly created tenant in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+        'shop_name' => 'required',
+        'lot_number' => 'required',
+        'zone_id' => 'required',
+        'floor_id' => 'required',
+        'category_id' => 'required',
+        'owner_name' => 'required',
+        'email' => 'required|email',
+        'phone' => 'required',
+        ]);
+
+        $tenant = new Tenant;
+        $tenant->fill($request->all());
+        $tenant->save();
+        return redirect()->route('tenant.upload', ['id'=>$tenant->id]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $tenant = Tenant::find($id);
+        if(!$tenant) throw new ModelNotFoundException;
+
+        return view('tenants.show', [
+          'tenant' => $tenant
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $tenant = Tenant::find($id);
+        if(!$tenant) throw new ModelNotFoundException;
+
+        return view('tenants.edit', [
+          'tenant' => $tenant
+        ]);
+    }
+
+    /**
+      * Update the specified resource in storage.
+      *
+      * @param \Illuminate\Http\Request $request
+      * @param int $id
+      *
+      * @return \Illuminate\Http\Response
+      */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+          'shop_name' => 'required',
+          'lot_number' => 'required',
+          'zone_id' => 'required',
+          'floor_id' => 'required',
+          'category_id' => 'required',
+          'owner_name' => 'required',
+          'email' => 'required|email',
+          'phone' => 'required',
+        ]);
+
+        $tenant = Tenant::find($id);
+        if(!$tenant) throw new ModelNotFoundException;
+
+        $tenant->fill($request->all());
+
+        $tenant->save();
+
+        return redirect()->route('tenant.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+		    $tenant = Tenant::find($id);
+        $tenant->delete();
+        return redirect()->route('tenant.index')
+                        ->with('success','Tenant deleted successfully');
+
+    }
+
+    /**
+    * Show the form for uploading a photo.
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function upload($id)
+    {
+      $tenant = Tenant::find($id);
+      if(!$tenant) throw new ModelNotFoundException;
+
+      return view('tenants.upload', [
+        'tenant' => $tenant,
+      ]);
+    }
+    /**
+
+    * Store a newly created resource in storage.
+    *
+    * @param \Illuminate\Http\Request $request
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function saveUpload(Request $request, $id)
+    {
+      $file = $request->file('image');
+
+      $path = $file->storeAs('public/tenant', $id.'.jpg');
+
+      return redirect()->route('tenant.index');
+    }
+}
